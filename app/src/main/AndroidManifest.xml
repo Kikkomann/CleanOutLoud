@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.runehou.cleanoutloud">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/col_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/MyAppTheme">
+        <activity android:name=".HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".RecyclingListActivity" />
+        <activity android:name=".RecycleInfoActivity" />
+        <activity android:name=".TopScorer" />
+        <activity android:name=".Events" />
+        <activity android:name=".Map" />
+        <activity android:name=".QuizActivity" />
+    </application>
+
+</manifest>

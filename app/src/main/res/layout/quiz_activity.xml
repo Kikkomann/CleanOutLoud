@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/question"
+        android:layout_margin="20dp"
+        android:text="Hvor mange tons co2 kan man spare på at slukke lyset i køkkenet?"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/choiceOne"
+            android:padding="5dp"
+            android:background="@drawable/rounded_background_one"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/choiceTwo"
+            android:padding="5dp"
+            android:background="@drawable/rounded_background_two"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/choiceThree"
+            android:padding="5dp"
+            android:background="@drawable/rounded_background_three"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/choiceFour"
+            android:padding="5dp"
+            android:background="@drawable/rounded_background_four"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <RadioButton android:id="@+id/choice1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 ton"
+            android:layout_margin="10dp"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/choice2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20 ton"
+            android:layout_margin="10dp"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/choice3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 ton"
+            android:layout_margin="10dp"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/choice4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40 ton"
+            android:layout_margin="10dp"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/answer"
+        android:text="Svar"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/correctMessage"
+        android:layout_weight="1"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/funFact"
+        android:layout_weight="3"
+        android:layout_margin="20dp"/>
+
+
+</LinearLayout>
