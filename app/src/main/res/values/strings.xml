@@ -3,4 +3,19 @@
 
     <string name="tent">Tent</string>
     <string name="pavilion">Pavilion</string>
+    <string name="title_activity_login2">LoginActivity2</string>
+
+    <string name="invalid_user_pass">Invalid username or password!</string>
+    <string name="title_activity_register">RegisterActivity</string>
+
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

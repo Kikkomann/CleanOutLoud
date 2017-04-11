@@ -10,13 +10,13 @@ import android.widget.Button;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button eventsBtn, gamesBtn, mapBtn, topScoreBtn, pressBtn;
+    private Button eventsBtn, gamesBtn, mapBtn, topScoreBtn;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_activity);
+        setContentView(R.layout.activity_home);
 
 
         eventsBtn = (Button) findViewById(R.id.eventsBtn);
@@ -33,10 +33,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         topScoreBtn = (Button) findViewById(R.id.topScoreBtn);
         topScoreBtn.setText("Top scorer");
         topScoreBtn.setOnClickListener(this);
-
-        pressBtn = (Button) findViewById(R.id.orangePress);
-        pressBtn.setText("Avis");
-        pressBtn.setOnClickListener(this);
     }
 
     @Override
@@ -52,9 +48,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (view == topScoreBtn) {
             startActivity(new Intent(getApplicationContext(), RecyclingListActivity.class));
-        }
-        if (view == pressBtn) {
-            startActivity(new Intent(getApplicationContext(), TopScorer.class));
         }
     }
 

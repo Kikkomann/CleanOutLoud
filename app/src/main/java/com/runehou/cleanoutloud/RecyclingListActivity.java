@@ -1,11 +1,9 @@
 package com.runehou.cleanoutloud;
 
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,7 +25,7 @@ public class RecyclingListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recycle_activity);
+        setContentView(R.layout.activity_recycle);
 
         adapter = new CustomAdapter();
 

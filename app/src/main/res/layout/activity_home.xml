@@ -28,8 +28,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_gravity="center">
 
             <Button
                 android:layout_width="120dp"
@@ -48,29 +47,21 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_gravity="center">
 
             <Button
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
                 android:id="@+id/recycleBtn"
+                android:layout_gravity="center"
                 android:lines="1"/>
 
-
             <Button
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
+                android:layout_gravity="center"
                 android:id="@+id/topScoreBtn"/>
         </LinearLayout>
-
-        <Button
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/orangePress"
-            android:layout_gravity="center"/>
 
 
     </LinearLayout>
