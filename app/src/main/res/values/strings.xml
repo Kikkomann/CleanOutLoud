@@ -7,6 +7,8 @@
 
     <string name="invalid_user_pass">Invalid username or password!</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="no_account">Har du ingen bruger? Lav en her!</string>
+    <string name="already_user">Har du allerede en bruger? Log ind her!</string>
 
     <string-array name="planets_array">
         <item>Mercury</item>

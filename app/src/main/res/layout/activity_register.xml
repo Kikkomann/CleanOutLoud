@@ -26,54 +26,6 @@
             android:src="@drawable/logo1" />
 
 
-        <LinearLayout
-            android:layout_width="@dimen/login_container_dimension"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_first_name_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-                android:hint="first_name">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_first_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName|textCapWords"
-                    android:nextFocusDown="@+id/input_last_name"
-                    android:nextFocusForward="@+id/input_last_name"
-                    android:nextFocusRight="@+id/input_last_name" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_last_name_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-                android:hint="last_name">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_last_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName|textCapWords"
-                    android:nextFocusDown="@+id/input_email"
-                    android:nextFocusForward="@+id/input_email"
-                    android:nextFocusLeft="@+id/input_first_name"
-                    android:nextFocusRight="@+id/input_email"
-                    android:nextFocusUp="@+id/input_first_name" />
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_email_layout"
             android:layout_width="match_parent"
@@ -81,10 +33,10 @@
             android:gravity="center_horizontal"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:hint="email">
+            android:hint="Brugernavn">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_email"
+                android:id="@+id/input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -94,11 +46,6 @@
                 android:nextFocusRight="@+id/input_last_name"
                 android:nextFocusUp="@+id/input_first_name" />
         </android.support.design.widget.TextInputLayout>
-
-        <Spinner
-            android:id="@+id/canmps_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -113,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:hint="password"
+                android:hint="Password"
                 app:passwordToggleEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
@@ -135,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:hint="confirm_password"
+                android:hint="Gentag password"
                 app:passwordToggleEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
@@ -147,8 +94,12 @@
                     android:nextFocusRight="@+id/btn_register"
                     android:nextFocusUp="@+id/input_email" />
             </android.support.design.widget.TextInputLayout>
-
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/camps_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_register"
@@ -158,7 +109,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
             android:padding="12dp"
-            android:text="Register" />
+            android:text="Lav ny bruger" />
 
         <TextView
             android:id="@+id/text_login_link"
@@ -167,13 +118,18 @@
             android:layout_marginBottom="24dp"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimary"
-            android:text="Already have a user? Login here!"
+            android:text="@string/already_user"
             android:textSize="16sp" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/register_error"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_error"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn"/>
+
+    </LinearLayout>
 </LinearLayout>
