@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view == eventsBtn) {
-            startActivity(new Intent(getApplicationContext(), Events.class));
+            startActivity(new Intent(getApplicationContext(), WallActivity.class));
         } else if (view == mapBtn) {
             startActivity(new Intent(getApplicationContext(), Map.class));
         } else if (view == gamesBtn) {

@@ -21,6 +21,7 @@
         <activity android:name=".Events" />
         <activity android:name=".Map" />
         <activity android:name=".QuizActivity" />
+        <activity android:name=".WallActivity" />
         <activity android:name=".HomeActivity" />
         <activity
             android:name=".RegisterActivity"

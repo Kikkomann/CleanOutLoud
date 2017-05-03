@@ -197,7 +197,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
 //        client.get("http://10.0.2.2:8084/colrest/CoL/object/campnamelist", new AsyncHttpResponseHandler() {
-                        client.get("http://52.43.233.138:8080/CoLWebService/CoL/object/campnamelist", new AsyncHttpResponseHandler() {
+                        client.get("http://52.43.233.138:8080/CoLWebService/CoL/objects/camplist", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
                 // Hide Progress Dialog

@@ -59,8 +59,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void invokeREST(final RequestParams params) {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://10.0.2.2:8084/colrest/CoL/login/dologin", params, new AsyncHttpResponseHandler() {
-//                        client.get("http://52.43.233.138:8080/CoLWebService/CoL/login/dologin", params, new AsyncHttpResponseHandler() {
+//        client.get("http://10.0.2.2:8084/colrest/CoL/login/dologin", params, new AsyncHttpResponseHandler() {
+                        client.get("http://52.43.233.138:8080/CoLWebService/CoL/login/dologin", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
                 // Hide Progress Dialog
