@@ -23,6 +23,7 @@
         <activity android:name=".QuizActivity" />
         <activity android:name=".WallActivity" />
         <activity android:name=".AddMessageActivity" />
+        <activity android:name=".GarbageActivity" />
         <activity android:name=".CommentsActivity" />
         <activity android:name=".HomeActivity" />
         <activity
