@@ -1,5 +1,6 @@
 package com.runehou.cleanoutloud;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,7 +29,7 @@ import java.util.Date;
 
 import static com.runehou.cleanoutloud.R.id.errorTxt;
 
-public class WallActivity extends ListActivity implements View.OnClickListener {
+public class WallActivity extends Activity {
 
 
     Button btn_add_message;
@@ -58,21 +59,40 @@ public class WallActivity extends ListActivity implements View.OnClickListener {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), CommentsActivity.class);
                 Bundle b = new Bundle();
-                b.putInt("messageId", messageObjectList.get(i).id); //Your id
-                intent.putExtras(b); //Put your id to your next Intent
+                b.putInt("messageId", messageObjectList.get(i).id);
+                b.putString("messageText", messageObjectList.get(i).text);
+                b.putString("messageDate", messageObjectList.get(i).date);
+                intent.putExtras(b);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        btn_add_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Nicki", ":Der bev klikket ");
+//            Intent intent = new Intent(this, CommentsActivity.class);
+//            startActivity(intent);
+//            finish();
+                startActivity(new Intent(getApplicationContext(), AddMessageActivity.class));
+
             }
         });
 
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        prgDialog.dismiss();
+    }
 
     public void invokeREST() {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://52.43.233.138:8080/CoLWebService/CoL/objects/wall", new AsyncHttpResponseHandler() {
+        client.get("http://52.43.233.138:8080/CoLWebService/CoL/messages", new AsyncHttpResponseHandler() {
 
             @Override
             public void onSuccess(String response) {
@@ -83,20 +103,13 @@ public class WallActivity extends ListActivity implements View.OnClickListener {
                     // JSON Object
                     JSONObject obj = new JSONObject(response);
                     // When the JSON response has status boolean value assigned with true
-
                         JSONArray messageList = obj.getJSONArray("wall");
-
                         for (int i = 0; i < messageList.length(); i++) {
-
                             JSONObject item = messageList.getJSONObject(i);
-                            Log.d("Nicki", ": " + item.getString("text"));
                             messageObjectList.add(new MessageObject(item.getString("text"), item.getString("date"), item.getInt("id")));
                         }
-                    setListAdapter(adapter);
+                        listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
-
-
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
@@ -132,15 +145,11 @@ public class WallActivity extends ListActivity implements View.OnClickListener {
         });
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == btn_add_message) {
-            Intent intent = new Intent(this, CommentsActivity.class);
-            startActivity(intent);
-            finish();
-//            startActivity(new Intent(getApplicationContext(), CommentsActivity.class));
-        }
-    }
+//    @Override
+//    public void onClick(View view) {
+//        if (view == btn_add_message) {
+//
+//    }
 
     public class MessageObject {
         String text;

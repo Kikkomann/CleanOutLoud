@@ -18,16 +18,17 @@
         <ListView
             android:id="@+id/listview_messages"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            >
         </ListView>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="50dp"
             android:text="Tilføj ny besked"
+            android:layout_gravity="bottom"
             android:id="@+id/button_wall_add_message"
-            android:layout_weight="4"
             />
 
 

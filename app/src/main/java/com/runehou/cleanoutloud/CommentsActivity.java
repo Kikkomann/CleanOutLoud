@@ -1,5 +1,6 @@
 package com.runehou.cleanoutloud;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,51 +24,63 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CommentsActivity extends ListActivity implements View.OnClickListener {
+public class CommentsActivity extends Activity {
 
 
     Button btn_add_comment;
+
     ProgressDialog prgDialog;
-    TextView tvOverskrift;
+    TextView tvOriginalMessageInfo, tvOriginalMessageDate, getTvOriginalMessageText;
 
     private ListView listView;
-    ArrayList<MessageObject> messageObjectList = new ArrayList<>();
+    ArrayList<commentsObject> commentsObjectList = new ArrayList<>();
     private CustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wall);
+        setContentView(R.layout.activity_comments);
 
-        btn_add_comment = (Button) findViewById(R.id.button_wall_add_message);
-        tvOverskrift = (TextView) findViewById(R.id.tv_overskrift_wall);
+        btn_add_comment = (Button) findViewById(R.id.button_comments_add_commment);
+        tvOriginalMessageDate = (TextView) findViewById(R.id.tv_comments_original_message_date);
+        tvOriginalMessageInfo = (TextView) findViewById(R.id.tv_comments_original_message_info);
+        getTvOriginalMessageText = (TextView) findViewById(R.id.tv_comments_original_message);
+        listView = (ListView) findViewById(R.id.listview_comments);
 
         prgDialog = new ProgressDialog(this);
         prgDialog.setMessage("Please wait...");
         prgDialog.setCancelable(false);
 
+        adapter = new CustomAdapter();
+
         Bundle b = getIntent().getExtras();
-        int value;
-        if(b != null){
-            value = b.getInt("messageId");
+        int messageId;
+        if (b != null) {
+            String str = b.getString("messageText");
+            Log.d("Nicki", " " + str);
+            tvOriginalMessageInfo.setText(str.substring(0,str.indexOf(":")));
+            getTvOriginalMessageText.setText(str.substring(str.indexOf(":")+1));
+            tvOriginalMessageDate.setText(b.getString("messageDate"));
+            messageId = b.getInt("messageId");
+            RequestParams params = new RequestParams();
+            params.put("messageid", String.valueOf(messageId));
+            invokeREST(params);
         } else {
             Toast.makeText(getApplicationContext(), "Beskedens ID kunne ikke findes", Toast.LENGTH_SHORT).show();
         }
 
-        adapter = new CustomAdapter();
-
-        invokeREST();
-
-        tvOverskrift.setText("hejsa");
-
     }
 
-    //TODO Implementer at der hentes kommentarene for en specifik besked.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        prgDialog.dismiss();
+    }
 
-    public void invokeREST() {
+    public void invokeREST(final RequestParams params) {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://52.43.233.138:8080/CoLWebService/CoL/objects/wall", new AsyncHttpResponseHandler() {
+        client.get("http://52.43.233.138:8080/CoLWebService/CoL/messages/comments", params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onSuccess(String response) {
@@ -76,27 +90,19 @@ public class CommentsActivity extends ListActivity implements View.OnClickListen
                     // JSON Object
                     JSONObject obj = new JSONObject(response);
                     // When the JSON response has status boolean value assigned with true
-
-                        JSONArray messageList = obj.getJSONArray("wall");
-
-                        for (int i = 0; i < messageList.length(); i++) {
-
-                            JSONObject item = messageList.getJSONObject(i);
-                            Log.d("Nicki", ": " + item.getString("text"));
-                            messageObjectList.add(new MessageObject(item.getString("text"), item.getString("date"), item.getInt("id")));
-                        }
-                    setListAdapter(adapter);
+                    JSONArray commentList = obj.getJSONArray("comment");
+                    for (int i = 0; i < commentList.length(); i++) {
+                        JSONObject item = commentList.getJSONObject(i);
+                        commentsObjectList.add(new commentsObject(item.getString("text"), item.getString("date")));
+                    }
+                    listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
-
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
-
                 }
             }
-
 
             // When the response returned by REST has Http response code other than '200'
             @Override
@@ -124,22 +130,14 @@ public class CommentsActivity extends ListActivity implements View.OnClickListen
         });
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == btn_add_comment) {
-//            startActivity(new Intent(getApplicationContext(), .class));
-        }
-    }
 
-    public class MessageObject {
+    public class commentsObject {
         String text;
         String date;
-        int id;
 
-        MessageObject (String text, String date, int id) {
+        commentsObject(String text, String date) {
             this.text = text;
-            this.date= date;
-            this.id = id;
+            this.date = date;
         }
 
     }
@@ -148,7 +146,7 @@ public class CommentsActivity extends ListActivity implements View.OnClickListen
     public class CustomAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return messageObjectList.size();
+            return commentsObjectList.size();
         }
 
         @Override
@@ -167,19 +165,18 @@ public class CommentsActivity extends ListActivity implements View.OnClickListen
                 view = getLayoutInflater().inflate(R.layout.recycle_item_wall, null);
             }
 
-             TextView tvInfo = (TextView) view.findViewById(R.id.tv_message_info);
+            TextView tvInfo = (TextView) view.findViewById(R.id.tv_message_info);
             TextView tvDate = (TextView) view.findViewById(R.id.tv_message_date);
             TextView tvText = (TextView) view.findViewById(R.id.tv_message);
 
-            String str = messageObjectList.get(position).text;
-            tvInfo.setText(str.substring(0,str.indexOf(":")));
-            tvText.setText(str.substring(str.indexOf(":")+1));
-            tvDate.setText(messageObjectList.get(position).date);
+            String str = commentsObjectList.get(position).text;
+            tvInfo.setText(str.substring(0, str.indexOf(":")));
+            tvText.setText(str.substring(str.indexOf(":") + 1));
+            tvDate.setText(commentsObjectList.get(position).date);
 
             return view;
         }
     }
-
 
 
 }

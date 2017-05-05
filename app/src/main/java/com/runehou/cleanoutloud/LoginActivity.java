@@ -2,7 +2,9 @@ package com.runehou.cleanoutloud;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +29,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button loginBtn, skipBtn;
     ProgressDialog prgDialog;
     TextView errorTxt, registerLink;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         errorTxt = (TextView) findViewById(R.id.errorTxt);
 
@@ -74,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Navigate to Home screen
 
                         String token = obj.getString("token");
+                        prefs.edit().putString("token", token).commit();
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         intent.putExtra("TOKEN", token);
                         startActivity(intent);
