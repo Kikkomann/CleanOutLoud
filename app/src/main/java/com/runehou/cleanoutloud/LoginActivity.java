@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ProgressDialog prgDialog;
     TextView errorTxt, registerLink;
     SharedPreferences prefs;
+    String strUserName, strPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         String token = obj.getString("token");
                         prefs.edit().putString("token", token).commit();
+                        Log.d("Nicki", "username: " + strUserName);
+                        prefs.edit().putString("username", strUserName).commit();
+
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         intent.putExtra("TOKEN", token);
                         startActivity(intent);
@@ -128,22 +133,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         if (v == loginBtn) {
 
-            String userName = this.userName.getText().toString();
-            String password = this.password.getText().toString();
+            strUserName = this.userName.getText().toString();
+            strPassword = this.password.getText().toString();
 
             RequestParams params = new RequestParams();
 
-            if (Utility.isNotNull(userName) && Utility.isNotNull(password)) {
-                params.put("username", userName);
-                params.put("password", password);
+            if (Utility.isNotNull(strUserName) && Utility.isNotNull(strPassword)) {
+                params.put("username", strUserName);
+                params.put("password", strPassword);
                 invokeREST(params);
             } else {
                 Toast.makeText(getApplicationContext(), R.string.invalid_user_pass, Toast.LENGTH_SHORT).show();
             }
         } else if (v == skipBtn) {
             RequestParams params = new RequestParams();
-            params.put("username", "rune");
-            params.put("password", "1234");
+            strUserName = "rune";
+            strPassword = "1234";
+            params.put("username", strUserName);
+            params.put("password", strPassword);
             invokeREST(params);
         } else if (v == registerLink) {
             startActivity(new Intent(getApplicationContext(), RegisterActivity.class));

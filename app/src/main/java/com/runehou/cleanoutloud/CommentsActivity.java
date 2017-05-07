@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,21 +34,28 @@ public class CommentsActivity extends Activity {
 
     ProgressDialog prgDialog;
     TextView tvOriginalMessageInfo, tvOriginalMessageDate, getTvOriginalMessageText;
+    EditText etNewComment;
 
     private ListView listView;
     ArrayList<commentsObject> commentsObjectList = new ArrayList<>();
     private CustomAdapter adapter;
+    int messageId;
+    SharedPreferences prefs;
+    String messageInfo, messageDate, messageText, messageAllText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         btn_add_comment = (Button) findViewById(R.id.button_comments_add_commment);
         tvOriginalMessageDate = (TextView) findViewById(R.id.tv_comments_original_message_date);
         tvOriginalMessageInfo = (TextView) findViewById(R.id.tv_comments_original_message_info);
         getTvOriginalMessageText = (TextView) findViewById(R.id.tv_comments_original_message);
         listView = (ListView) findViewById(R.id.listview_comments);
+        etNewComment = (EditText) findViewById(R.id.et_comment);
 
         prgDialog = new ProgressDialog(this);
         prgDialog.setMessage("Please wait...");
@@ -54,13 +64,16 @@ public class CommentsActivity extends Activity {
         adapter = new CustomAdapter();
 
         Bundle b = getIntent().getExtras();
-        int messageId;
         if (b != null) {
-            String str = b.getString("messageText");
-            Log.d("Nicki", " " + str);
-            tvOriginalMessageInfo.setText(str.substring(0,str.indexOf(":")));
-            getTvOriginalMessageText.setText(str.substring(str.indexOf(":")+1));
-            tvOriginalMessageDate.setText(b.getString("messageDate"));
+            messageAllText = b.getString("messageText");
+            Log.d("Nicki", "messageAlleText " + messageAllText);
+
+            messageInfo = messageAllText.substring(0, messageAllText.indexOf(":"));
+            messageText = messageAllText.substring(messageAllText.indexOf(":") + 1);
+            messageDate = b.getString("messageDate");
+            tvOriginalMessageInfo.setText(messageInfo);
+            getTvOriginalMessageText.setText(messageText);
+            tvOriginalMessageDate.setText(messageDate);
             messageId = b.getInt("messageId");
             RequestParams params = new RequestParams();
             params.put("messageid", String.valueOf(messageId));
@@ -68,6 +81,26 @@ public class CommentsActivity extends Activity {
         } else {
             Toast.makeText(getApplicationContext(), "Beskedens ID kunne ikke findes", Toast.LENGTH_SHORT).show();
         }
+
+
+        btn_add_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!etNewComment.getText().equals("")) {
+                    RequestParams params = new RequestParams();
+                    Log.d("Nicki", "etNewComment " + etNewComment.getText());
+                    String str = String.valueOf(etNewComment.getText());
+                    params.put("comment", str);
+                    params.put("messageid", String.valueOf(messageId));
+                    params.put("token", prefs.getString("token", "empty_token"));
+                    invokeRESTAddComment(params);
+                    adapter.notifyDataSetChanged();
+                } else {
+                 Toast.makeText(getApplicationContext(), "Du skal skrive noget for at kunne tilføje en kommentar", Toast.LENGTH_LONG).show();
+            }
+
+            }
+        });
 
     }
 
@@ -130,6 +163,52 @@ public class CommentsActivity extends Activity {
         });
     }
 
+
+    public void invokeRESTAddComment(final RequestParams params) {
+        prgDialog.show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://52.43.233.138:8080/CoLWebService/CoL/messages/addcomment", params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(String response) {
+                // Hide Progress Dialog
+                prgDialog.hide();
+
+                Intent intent = new Intent(getApplicationContext(), CommentsActivity.class);
+                Bundle b = new Bundle();
+                b.putInt("messageId", messageId);
+                b.putString("messageText", messageAllText);
+                b.putString("messageDate", messageDate);
+                intent.putExtras(b);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+
+            // When the response returned by REST has Http response code other than '200'
+            @Override
+            public void onFailure(int statusCode, Throwable error,
+                                  String content) {
+                // Hide Progress Dialog
+                prgDialog.hide();
+                // When Http response code is '404'
+                if (statusCode == 404) {
+                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+                }
+                // When Http response code is '500'
+                else if (statusCode == 500) {
+                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+                }
+                // When Http response code other than 404, 500
+                else {
+                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    error.printStackTrace();
+
+                }
+            }
+        });
+    }
 
     public class commentsObject {
         String text;

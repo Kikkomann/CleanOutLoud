@@ -96,10 +96,11 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/camps_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_register_choose_camp"
+            />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_register"
@@ -126,10 +127,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/register_error"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn"/>
 
     </LinearLayout>
 </LinearLayout>

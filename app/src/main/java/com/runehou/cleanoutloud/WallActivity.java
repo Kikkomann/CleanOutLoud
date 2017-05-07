@@ -64,7 +64,6 @@ public class WallActivity extends Activity {
                 b.putString("messageDate", messageObjectList.get(i).date);
                 intent.putExtras(b);
                 startActivity(intent);
-                finish();
             }
         });
 

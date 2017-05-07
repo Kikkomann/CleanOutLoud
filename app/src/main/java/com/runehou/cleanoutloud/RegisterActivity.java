@@ -1,17 +1,23 @@
 package com.runehou.cleanoutloud;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,10 +35,13 @@ import java.util.List;
 public class RegisterActivity extends Activity implements View.OnClickListener {
     ProgressDialog prgDialog;
     TextView errorMsg, loginLink;
-    EditText userName, password, passwordConfirm;
-    Button registerBtn;
+    EditText etUserName, etPassword, etPasswordConfirm;
+    Button registerBtn, btnChooseCamp;
     Spinner campsSpinner;
     ArrayAdapter<String> adapter;
+    String selectedCamp;
+    AlertDialog alert11;
+
 
     private List<String> camps = new ArrayList<String>();
 
@@ -47,68 +56,133 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         prgDialog.setMessage("Please wait...");
         prgDialog.setCancelable(false);
 
+        selectedCamp = "";
+
         // Find Error Msg Text View control by ID
         errorMsg = (TextView) findViewById(R.id.register_error);
 
         loginLink = (TextView) findViewById(R.id.text_login_link);
         loginLink.setOnClickListener(this);
 
-        userName = (EditText) findViewById(R.id.input_username);
+        etUserName = (EditText) findViewById(R.id.input_username);
 
-        passwordConfirm = (EditText) findViewById(R.id.input_confirm);
-        password = (EditText) findViewById(R.id.input_password);
+        etPasswordConfirm = (EditText) findViewById(R.id.input_confirm);
+        etPassword = (EditText) findViewById(R.id.input_password);
+
+
+        RequestParams params = new RequestParams();
+        params.put("sorted", "true");
+        invokeRESTCamps(params);
+
+
+//        campsSpinner = (Spinner) findViewById(R.id.camps_spinner);
+        btnChooseCamp = (Button) findViewById(R.id.btn_register_choose_camp);
+        btnChooseCamp.setText("Vælg camp");
+        btnChooseCamp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+                final NumberPicker CampPicker = new NumberPicker(RegisterActivity.this);
+                final String[] stringsCamps = camps.toArray(new String[camps.size()]);
+                CampPicker.setMinValue(0);
+                CampPicker.setMaxValue(stringsCamps.length-1);
+                CampPicker.setDisplayedValues(stringsCamps);
+
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
+                builder1.setMessage("Vælg din camp");
+                builder1.setCancelable(true);
+                builder1.setView(CampPicker);
+
+
+
+                builder1.setPositiveButton(
+                        "Vælg camp",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                selectedCamp = stringsCamps[CampPicker.getValue()];
+                                btnChooseCamp.setText(selectedCamp);
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "Annuller",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alert11 = builder1.create();
+                alert11.show();
+
+
+
+
+
+
+
+
+            }
+        });
+
+
+
+        test = "";
+
 
         registerBtn = (Button) findViewById(R.id.btn_register);
-        registerBtn.setOnClickListener(this);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        campsSpinner = (Spinner) findViewById(R.id.camps_spinner);
+//                RequestParams params1 = new RequestParams();
+//                params1.put("username", etUserName);
+//                params1.put("password", etPassword);
+//                params1.put("camp", selectedCamp);
+//                invokeWS(params1);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, camps);
+                registerUser();
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        campsSpinner.setAdapter(adapter);
-
-
-        testBtn = (Button) findViewById(R.id.btn);
-        testBtn.setOnClickListener(this);
-        test = "";
+            }
+        });
 
     }
 
     /**
      * Method gets triggered when Register button is clicked
      *
-     * @param view
+     * @param
      */
-    public void registerUser(View view) {
+    public void registerUser() {
         // Get NAme ET control value
-        String name = userName.getText().toString();
+        String name = etUserName.getText().toString();
         // Get Email ET control value
-        String email = password.getText().toString();
+        String password = etPassword.getText().toString();
         // Get Password ET control value
-        String password = passwordConfirm.getText().toString();
+        String passwordConFirm = etPasswordConfirm.getText().toString();
         // Instantiate Http Request Param Object
         RequestParams params = new RequestParams();
-        // When Name Edit View, Email Edit View and Password Edit View have values other than Null
-        if (Utility.isNotNull(name) && Utility.isNotNull(email) && Utility.isNotNull(password)) {
-            // When Email entered is Valid
-            if (Utility.validate(email)) {
-                // Put Http parameter name with value of Name Edit View control
-                params.put("name", name);
-                // Put Http parameter username with value of Email Edit View control
-                params.put("username", email);
-                // Put Http parameter password with value of Password Edit View control
-                params.put("password", password);
-                // Invoke RESTful Web Service with Http parameters
-                invokeWS(params);
+        if (Utility.isNotNull(name) && Utility.isNotNull(passwordConFirm) && Utility.isNotNull(password)) {
+            if (password.equals(passwordConFirm)) {
+
+                if (!selectedCamp.isEmpty()) {
+                    params.put("username", name);
+                    params.put("password", password);
+                    params.put("camp", selectedCamp);
+                    // Invoke RESTful Web Service with Http parameters
+                    invokeWS(params);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Vælg en camp", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Indstastet kodeord stemmer ikke overens", Toast.LENGTH_LONG).show();
             }
-            // When Email is invalid
-            else {
-                Toast.makeText(getApplicationContext(), "Please enter valid email", Toast.LENGTH_LONG).show();
-            }
-        }
-        // When any of the Edit View control left blank
-        else {
+
+        } else {
             Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
         }
 
@@ -124,33 +198,30 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         prgDialog.show();
         // Make RESTful webservice call using AsyncHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://192.168.2.2:9999/useraccount/register/doregister", params, new AsyncHttpResponseHandler() {
+        client.get("http://52.43.233.138:8080/CoLWebService/CoL/login/createuser", params, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
             @Override
             public void onSuccess(String response) {
+
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    if (obj.getString("success").equals("true")){
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Brugeren blev ikke oprettet - prøv at andet brugernavn", Toast.LENGTH_LONG).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 // Hide Progress Dialog
                 prgDialog.hide();
-                try {
-                    // JSON Object
-                    JSONObject obj = new JSONObject(response);
-                    // When the JSON response has status boolean value assigned with true
-                    if (obj.getBoolean("status")) {
-                        // Set Default Values for Edit View controls
-                        setDefaultValues();
-                        // Display successfully registered message using Toast
-                        Toast.makeText(getApplicationContext(), "You are successfully registered!", Toast.LENGTH_LONG).show();
-                    }
-                    // Else display error message
-                    else {
-                        errorMsg.setText(obj.getString("error_msg"));
-                        Toast.makeText(getApplicationContext(), obj.getString("error_msg"), Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
 
-                }
             }
 
             // When the response returned by REST has Http response code other than '200'
@@ -189,32 +260,32 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
      * Set degault values for Edit View controls
      */
     public void setDefaultValues() {
-        userName.setText("");
-        password.setText("");
+        etUserName.setText("");
+        etPassword.setText("");
     }
 
-    public void invokeGetCamps() {
+    public void invokeRESTCamps(final RequestParams params) {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
-//        client.get("http://10.0.2.2:8084/colrest/CoL/object/campnamelist", new AsyncHttpResponseHandler() {
-                        client.get("http://52.43.233.138:8080/CoLWebService/CoL/objects/camplist", new AsyncHttpResponseHandler() {
+        client.get("http://52.43.233.138:8080/CoLWebService/CoL/camps", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
+                Log.d("Nicki", ": ON SUCCESS!");
                 // Hide Progress Dialog
                 prgDialog.hide();
                 try {
                     // JSON Object
                     JSONObject obj = new JSONObject(response);
-
-                    String test2 = obj.getString("Wazzup");
-                    Log.w("JSON", test2);
-                    test = test2;
-
+                    // When the JSON response has status boolean value assigned with true
+                    JSONArray campList = obj.getJSONArray("camps");
+                    for (int i = 0; i < campList.length(); i++) {
+                        JSONObject item = campList.getJSONObject(i);
+                        camps.add(item.getString("name"));
+                    }
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
-
                 }
             }
 
@@ -245,12 +316,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        prgDialog.dismiss();
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == loginLink) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        } else if (v == testBtn) {
-            invokeGetCamps();
-            Toast.makeText(this, test, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -24,14 +24,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         eventsBtn = (Button) findViewById(R.id.eventsBtn);
         eventsBtn.setOnClickListener(this);
-        eventsBtn.setText("Events");
+        eventsBtn.setText("Væggen");
         mapBtn = (Button) findViewById(R.id.mapBtn);
         mapBtn.setOnClickListener(this);
-        mapBtn.setText("Kort");
+        mapBtn.setText("Kort (ikke impl)");
 
         gamesBtn = (Button) findViewById(R.id.recycleBtn);
         gamesBtn.setOnClickListener(this);
-        gamesBtn.setText("Quiz");
+        gamesBtn.setText("Quiz (ikke impl)");
 
         topScoreBtn = (Button) findViewById(R.id.topScoreBtn);
         topScoreBtn.setText("Top scorer");
@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (view == gamesBtn) {
             startActivity(new Intent(getApplicationContext(), QuizActivity.class));
         } else if (view == topScoreBtn) {
-            startActivity(new Intent(getApplicationContext(), RecyclingListActivity.class));
+            startActivity(new Intent(getApplicationContext(), GarbageActivity.class));
         } else if (view == logoutBtn) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
