@@ -24,7 +24,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         eventsBtn = (Button) findViewById(R.id.eventsBtn);
         eventsBtn.setOnClickListener(this);
-        eventsBtn.setText("Væggen");
         mapBtn = (Button) findViewById(R.id.mapBtn);
         mapBtn.setOnClickListener(this);
         mapBtn.setText("Kort (ikke impl)");
@@ -34,11 +33,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         gamesBtn.setText("Quiz (ikke impl)");
 
         topScoreBtn = (Button) findViewById(R.id.topScoreBtn);
-        topScoreBtn.setText("Top scorer");
         topScoreBtn.setOnClickListener(this);
 
         logoutBtn = (Button) findViewById(R.id.logoutBtn);
-        logoutBtn.setText("Log ud");
         logoutBtn.setOnClickListener(this);
     }
 

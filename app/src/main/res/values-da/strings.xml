@@ -1,33 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Clean Out Loud</string>
     <string name="title_activity_register">RegisterActivity</string>
 
     <string name="invalid_user_pass">Invalid username or password!</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="password_repeat">Repeat password</string>
-    <string name="login_btn">Login</string>
+    <string name="username">Brugernavn</string>
+    <string name="password">Adgangskode</string>
+    <string name="password_repeat">Gentag adgangskode</string>
+    <string name="login_btn">Log ind</string>
     <string name="skip_btn">Skip</string>
-    <string name="register">Create new user</string>
-    <string name="choose_camp">Choose camp</string>
-    <string name="no_account">No user? Make a new one here!</string>
-    <string name="already_user">Do you already have a user? Log in here!</string>
+    <string name="register">Lav bruger</string>
+    <string name="choose_camp">Vælg camp</string>
+    <string name="no_account">Har du ingen bruger? Lav en her!</string>
+    <string name="already_user">Har du allerede en bruger? Log ind her!</string>
 
-    <string name="wall_btn">Wall</string>
+    <string name="wall_btn">Væggen</string>
     <string name="topscorer">Topscorer</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log ud</string>
 
-    <string name="date_error">Could not get date</string>
-    <string name="please_wait">Please wait&#8230;</string>
+    <string name="date_error">Kunne ikke få dato</string>
+    <string name="please_wait">Vent venligst&#8230;</string>
 
-    <string name="add_new_comment">Add comment</string>
-    <string name="add_comment">Type a comment</string>
-    <string name="add_message">Write new message</string>
-    <string name="add_new_message">Create new message</string>
-    <string name="type_message">Type the message you wish to post</string>
-    <string name="choose_your_camp">Choose your camp</string>
-    <string name="choose_a_camp">Choose a camp</string>
-    <string name="cancel">Cancel</string>
+    <string name="add_new_comment">Tilføj kommentar</string>
+    <string name="add_comment">Skriv en kommentar</string>
+    <string name="add_message">Tilføj ny besked</string>
+    <string name="add_new_message">Tilføj ny besked</string>
+    <string name="type_message">Skriv teksten du ønsker at slå op på væggen</string>
+    <string name="choose_your_camp">Vælg din camp</string>
+    <string name="choose_a_camp">Vælg en camp</string>
+    <string name="cancel">Annuller</string>
     <string name="user_not_created">Brugeren blev ikke oprettet - prøv at andet brugernavn</string>
     <string name="resource_not_found">Requested resource not found</string>
     <string name="server_error">Something went wrong at server end</string>
@@ -37,7 +39,6 @@
     <string name="blank_form">Please fill the form, don\'t leave any field blank</string>
     <string name="login_success">You are successfully logged in!</string>
     <string name="add_trash">Tilføj skrald til camp</string>
-    <string name="trash_point">Skraldeindlevering</string>
     <string name="add_trash_to">Tilføj skrald til</string>
     <string name="add">Tilføj</string>
     <string name="trash_added">Skrald blev tilføjet</string>

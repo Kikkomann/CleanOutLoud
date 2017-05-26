@@ -1,5 +1,11 @@
 package com.runehou.cleanoutloud;
 
+import android.content.res.Resources;
+import android.util.Log;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -31,5 +37,26 @@ public class Utility {
      */
     public static boolean isNotNull(String txt){
         return txt!=null && txt.trim().length()>0 ? true: false;
+    }
+
+    public static String dateFormat(String dateString, String error) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Date date;
+        try {
+            date = format.parse(dateString);
+            return new SimpleDateFormat("dd MMM HH:mm").format(date);
+        } catch (ParseException e) {
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date date1;
+            try {
+                date1 = format2.parse(dateString);
+                return new SimpleDateFormat("dd MMM HH:mm").format(date1);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+                return error;
+            }
+        }
+
+
     }
 }

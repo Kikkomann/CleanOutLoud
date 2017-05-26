@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
+    android:background="@color/white"
     tools:context=".RegisterActivity">
 
 
@@ -32,8 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="Brugernavn">
+            android:layout_marginTop="8dp">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/input_username"
@@ -44,7 +44,8 @@
                 android:nextFocusForward="@+id/input_password"
                 android:nextFocusLeft="@+id/input_password"
                 android:nextFocusRight="@+id/input_last_name"
-                android:nextFocusUp="@+id/input_first_name" />
+                android:nextFocusUp="@+id/input_first_name"
+                android:hint="@string/username"/>
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
@@ -60,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:hint="Password"
                 app:passwordToggleEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
@@ -72,7 +72,8 @@
                     android:nextFocusForward="@+id/input_confirm"
                     android:nextFocusLeft="@+id/input_email"
                     android:nextFocusRight="@+id/input_confirm"
-                    android:nextFocusUp="@+id/input_email" />
+                    android:nextFocusUp="@+id/input_email"
+                    android:hint="@string/password"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -82,7 +83,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:hint="Gentag password"
                 app:passwordToggleEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
@@ -92,7 +92,8 @@
                     android:inputType="textPassword"
                     android:nextFocusLeft="@+id/input_password"
                     android:nextFocusRight="@+id/btn_register"
-                    android:nextFocusUp="@+id/input_email" />
+                    android:nextFocusUp="@+id/input_email"
+                    android:hint="@string/password_repeat"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
@@ -100,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_register_choose_camp"
-            />
+            android:text="@string/choose_camp"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_register"
@@ -110,7 +111,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
             android:padding="12dp"
-            android:text="Lav ny bruger" />
+            android:text="@string/register" />
 
         <TextView
             android:id="@+id/text_login_link"

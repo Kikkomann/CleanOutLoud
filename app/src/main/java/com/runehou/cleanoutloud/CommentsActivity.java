@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CommentsActivity extends Activity {
 
@@ -48,6 +52,8 @@ public class CommentsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         btn_add_comment = (Button) findViewById(R.id.button_comments_add_commment);
@@ -58,7 +64,7 @@ public class CommentsActivity extends Activity {
         etNewComment = (EditText) findViewById(R.id.et_comment);
 
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Please wait...");
+        prgDialog.setMessage(getResources().getString(R.string.please_wait));
         prgDialog.setCancelable(false);
 
         adapter = new CustomAdapter();
@@ -69,7 +75,7 @@ public class CommentsActivity extends Activity {
             Log.d("Nicki", "messageAlleText " + messageAllText);
 
             messageInfo = messageAllText.substring(0, messageAllText.indexOf(":"));
-            messageText = messageAllText.substring(messageAllText.indexOf(":") + 1);
+            messageText = messageAllText.substring(messageAllText.indexOf(":") + 4);
             messageDate = b.getString("messageDate");
             tvOriginalMessageInfo.setText(messageInfo);
             getTvOriginalMessageText.setText(messageText);
@@ -79,14 +85,14 @@ public class CommentsActivity extends Activity {
             params.put("messageid", String.valueOf(messageId));
             invokeREST(params);
         } else {
-            Toast.makeText(getApplicationContext(), "Beskedens ID kunne ikke findes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.msg_id_not_found, Toast.LENGTH_SHORT).show();
         }
 
 
         btn_add_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!etNewComment.getText().equals("")) {
+                if (!etNewComment.getText().toString().equals("")) {
                     RequestParams params = new RequestParams();
                     Log.d("Nicki", "etNewComment " + etNewComment.getText());
                     String str = String.valueOf(etNewComment.getText());
@@ -96,7 +102,7 @@ public class CommentsActivity extends Activity {
                     invokeRESTAddComment(params);
                     adapter.notifyDataSetChanged();
                 } else {
-                 Toast.makeText(getApplicationContext(), "Du skal skrive noget for at kunne tilføje en kommentar", Toast.LENGTH_LONG).show();
+                 Toast.makeText(getApplicationContext(), R.string.add_comment_error, Toast.LENGTH_LONG).show();
             }
 
             }
@@ -126,13 +132,13 @@ public class CommentsActivity extends Activity {
                     JSONArray commentList = obj.getJSONArray("comment");
                     for (int i = 0; i < commentList.length(); i++) {
                         JSONObject item = commentList.getJSONObject(i);
-                        commentsObjectList.add(new commentsObject(item.getString("text"), item.getString("date")));
+                        commentsObjectList.add(new commentsObject(item.getString("text"), Utility.dateFormat(item.getString("date"), getResources().getString(R.string.date_error))));
                     }
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -145,17 +151,17 @@ public class CommentsActivity extends Activity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }
@@ -192,17 +198,17 @@ public class CommentsActivity extends Activity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }
@@ -250,7 +256,7 @@ public class CommentsActivity extends Activity {
 
             String str = commentsObjectList.get(position).text;
             tvInfo.setText(str.substring(0, str.indexOf(":")));
-            tvText.setText(str.substring(str.indexOf(":") + 1));
+            tvText.setText(str.substring(str.indexOf(":") + 4));
             tvDate.setText(commentsObjectList.get(position).date);
 
             return view;

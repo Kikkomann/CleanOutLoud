@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registerLink.setOnClickListener(this);
 
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Please wait...");
+        prgDialog.setMessage(getResources().getString(R.string.please_wait));
         prgDialog.setCancelable(false);
 
         skipBtn = (Button) findViewById(R.id.skipBtn);
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     JSONObject obj = new JSONObject(response);
                     // When the JSON response has status boolean value assigned with true
                     if (obj.getBoolean("success")) {
-                        Toast.makeText(getApplicationContext(), "You are successfully logged in!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
                         // Navigate to Home screen
 
                         String token = obj.getString("token");
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
 
                 }
@@ -111,17 +111,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }

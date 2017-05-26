@@ -47,7 +47,7 @@ public class WallActivity extends Activity {
         btn_add_message = (Button) findViewById(R.id.button_wall_add_message);
 
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Please wait...");
+        prgDialog.setMessage(getResources().getString(R.string.please_wait));
         prgDialog.setCancelable(false);
 
         adapter = new CustomAdapter();
@@ -105,13 +105,13 @@ public class WallActivity extends Activity {
                         JSONArray messageList = obj.getJSONArray("wall");
                         for (int i = 0; i < messageList.length(); i++) {
                             JSONObject item = messageList.getJSONObject(i);
-                            messageObjectList.add(new MessageObject(item.getString("text"), item.getString("date"), item.getInt("id")));
+                            messageObjectList.add(new MessageObject(item.getString("text"), Utility.dateFormat(item.getString("date"), getResources().getString(R.string.date_error)), item.getInt("id")));
                         }
                         listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
 
                 }
@@ -126,17 +126,17 @@ public class WallActivity extends Activity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }
@@ -192,7 +192,7 @@ public class WallActivity extends Activity {
 
             String str = messageObjectList.get(position).text;
             tvInfo.setText(str.substring(0,str.indexOf(":")));
-            tvText.setText(str.substring(str.indexOf(":")+1));
+            tvText.setText(str.substring(str.indexOf(":") + 4));
             tvDate.setText(messageObjectList.get(position).date);
 
             return view;

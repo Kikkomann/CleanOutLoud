@@ -7,28 +7,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-public class AddMessageActivity extends AppCompatActivity {
+public class    AddMessageActivity extends AppCompatActivity {
 
 
     Button btn_add_message;
@@ -46,8 +34,9 @@ public class AddMessageActivity extends AppCompatActivity {
         btn_add_message = (Button) findViewById(R.id.button_wall_add_message);
         etMessage = (EditText) findViewById(R.id.et_message_new);
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Please wait...");
+        prgDialog.setMessage(getResources().getString(R.string.please_wait));
         prgDialog.setCancelable(false);
+
 
         btn_add_message.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,17 +85,17 @@ public class AddMessageActivity extends AppCompatActivity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }

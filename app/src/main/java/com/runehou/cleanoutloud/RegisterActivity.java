@@ -10,15 +10,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +33,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     TextView errorMsg, loginLink;
     EditText etUserName, etPassword, etPasswordConfirm;
     Button registerBtn, btnChooseCamp;
-    Spinner campsSpinner;
-    ArrayAdapter<String> adapter;
     String selectedCamp;
     AlertDialog alert11;
 
@@ -46,14 +40,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private List<String> camps = new ArrayList<String>();
 
     String test;
-    Button testBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Please wait...");
+        prgDialog.setMessage(getResources().getString(R.string.please_wait));
         prgDialog.setCancelable(false);
 
         selectedCamp = "";
@@ -77,13 +70,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
 //        campsSpinner = (Spinner) findViewById(R.id.camps_spinner);
         btnChooseCamp = (Button) findViewById(R.id.btn_register_choose_camp);
-        btnChooseCamp.setText("Vælg camp");
         btnChooseCamp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 final NumberPicker CampPicker = new NumberPicker(RegisterActivity.this);
                 final String[] stringsCamps = camps.toArray(new String[camps.size()]);
                 CampPicker.setMinValue(0);
@@ -92,14 +81,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
-                builder1.setMessage("Vælg din camp");
+                builder1.setMessage(R.string.choose_your_camp);
                 builder1.setCancelable(true);
                 builder1.setView(CampPicker);
 
 
 
                 builder1.setPositiveButton(
-                        "Vælg camp",
+                        getResources().getString(R.string.choose_camp),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 selectedCamp = stringsCamps[CampPicker.getValue()];
@@ -109,7 +98,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                         });
 
                 builder1.setNegativeButton(
-                        "Annuller",
+                        R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -128,12 +117,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
             }
         });
-
-
-
-        test = "";
-
-
         registerBtn = (Button) findViewById(R.id.btn_register);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,14 +159,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     // Invoke RESTful Web Service with Http parameters
                     invokeWS(params);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Vælg en camp", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.choose_a_camp, Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "Indstastet kodeord stemmer ikke overens", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.password_match, Toast.LENGTH_LONG).show();
             }
 
         } else {
-            Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.blank_form, Toast.LENGTH_LONG).show();
         }
 
     }
@@ -212,7 +195,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Brugeren blev ikke oprettet - prøv at andet brugernavn", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.user_not_created, Toast.LENGTH_LONG).show();
                     }
 
 
@@ -232,15 +215,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -284,7 +267,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     }
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -297,17 +280,17 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }

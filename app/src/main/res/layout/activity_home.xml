@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/white"
     tools:context="com.runehou.cleanoutloud.HomeActivity">
 
     <ImageView
@@ -40,6 +41,7 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="@string/wall_btn"
                 android:id="@+id/eventsBtn"/>
 
         </LinearLayout>
@@ -60,6 +62,7 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="@string/topscorer"
                 android:id="@+id/topScoreBtn"/>
         </LinearLayout>
 
@@ -67,6 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/logoutBtn"
+            android:text="@string/logout"
             android:layout_gravity="center|bottom"/>
     </LinearLayout>
 </LinearLayout>

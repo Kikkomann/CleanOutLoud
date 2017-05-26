@@ -13,7 +13,7 @@
             android:gravity="center"
             android:textSize="20pt"
             android:id="@+id/tv_overskrift_wall"
-            android:text="Væggen"/>
+            android:text="@string/wall_btn"/>
 
         <ListView
             android:id="@+id/listview_messages"
@@ -26,10 +26,10 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="Tilføj ny besked"
+            android:text="@string/add_message"
             android:layout_gravity="bottom"
             android:id="@+id/button_wall_add_message"
-            />
+            android:layout_marginBottom="15dp" />
 
 
 

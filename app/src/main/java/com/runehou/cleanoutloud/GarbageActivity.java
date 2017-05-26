@@ -54,14 +54,14 @@ public class GarbageActivity extends Activity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         btnAddGarbage = (Button) findViewById(R.id.button_wall_add_message);
-        btnAddGarbage.setText("Tilføj skrald til camp");
+        btnAddGarbage.setText(R.string.add_trash);
         btnAddGarbage.setVisibility(View.GONE);
         tvOverskrift = (TextView) findViewById(R.id.tv_overskrift_wall);
-        tvOverskrift.setText("Skraldeindlevering");
+        tvOverskrift.setText(R.string.trash_point);
 
 
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Please wait...");
+        prgDialog.setMessage(getResources().getString(R.string.please_wait));
         prgDialog.setCancelable(false);
 
         adapter = new CustomAdapter();
@@ -87,14 +87,14 @@ public class GarbageActivity extends Activity {
               inputText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(GarbageActivity.this);
-                builder1.setMessage("Tilføj skrald til " + campObjectList.get(i).name);
+                builder1.setMessage(getString(R.string.add_trash_to) + campObjectList.get(i).name);
                 builder1.setCancelable(true);
                 builder1.setView(inputText);
 
 
 
                 builder1.setPositiveButton(
-                        "Tilføj",
+                        R.string.add,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 RequestParams params = new RequestParams();
@@ -115,7 +115,7 @@ public class GarbageActivity extends Activity {
                         });
 
                 builder1.setNegativeButton(
-                        "Annuller",
+                        R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -170,7 +170,7 @@ public class GarbageActivity extends Activity {
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -183,17 +183,17 @@ public class GarbageActivity extends Activity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }
@@ -220,7 +220,7 @@ public class GarbageActivity extends Activity {
                     }
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
-                    Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -233,17 +233,17 @@ public class GarbageActivity extends Activity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }
@@ -261,7 +261,7 @@ public class GarbageActivity extends Activity {
             public void onSuccess(String response) {
                 // Hide Progress Dialog
                 prgDialog.hide();
-             Toast.makeText(getApplicationContext(), "Skrald blev tilføjet", Toast.LENGTH_SHORT).show();
+             Toast.makeText(getApplicationContext(), R.string.trash_added, Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -273,17 +273,17 @@ public class GarbageActivity extends Activity {
                 prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resource_not_found, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.server_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
                 // When Http response code other than 404, 500
                 else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
 
                 }
@@ -334,7 +334,7 @@ public class GarbageActivity extends Activity {
             TextView tvText = (TextView) view.findViewById(R.id.tv_message);
 
             tvInfo.setText(campObjectList.get(position).name);
-            tvDate.setText(String.valueOf(campObjectList.get(position).weight) + " kg");
+            tvDate.setText(String.valueOf(campObjectList.get(position).weight) + getString(R.string.kg));
             tvText.setText(campObjectList.get(position).location);
 
             return view;
