@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -42,8 +41,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         errorTxt = (TextView) findViewById(R.id.errorTxt);
 
-        userName = (TextInputEditText) findViewById(R.id.input_email);
-        email_layout = (TextInputLayout) findViewById(R.id.input_email_layout);
+        userName = (TextInputEditText) findViewById(R.id.input_username);
+        email_layout = (TextInputLayout) findViewById(R.id.input_username_layout);
 
         password = (TextInputEditText) findViewById(R.id.input_password);
         password_layout = (TextInputLayout) findViewById(R.id.input_password_layout);
@@ -81,9 +80,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Navigate to Home screen
 
                         String token = obj.getString("token");
-                        prefs.edit().putString("token", token).commit();
-                        Log.d("Nicki", "username: " + strUserName);
-                        prefs.edit().putString("username", strUserName).commit();
+                        prefs.edit().putString("token", token).apply();
+                        prefs.edit().putString("username", strUserName).apply();
 
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         intent.putExtra("TOKEN", token);
@@ -95,13 +93,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(getApplicationContext(), obj.getString("error_msg"), Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
-
                 }
             }
-
 
             // When the response returned by REST has Http response code other than '200'
             @Override
@@ -123,16 +118,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 else {
                     Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                     error.printStackTrace();
-
                 }
             }
         });
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        prgDialog.dismiss();
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == loginBtn) {
-
             strUserName = this.userName.getText().toString();
             strPassword = this.password.getText().toString();
 

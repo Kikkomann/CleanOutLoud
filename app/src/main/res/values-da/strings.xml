@@ -31,18 +31,19 @@
     <string name="choose_a_camp">Vælg en camp</string>
     <string name="cancel">Annuller</string>
     <string name="user_not_created">Brugeren blev ikke oprettet - prøv at andet brugernavn</string>
-    <string name="resource_not_found">Requested resource not found</string>
-    <string name="server_error">Something went wrong at server end</string>
-    <string name="unexpected_error">Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]</string>
-    <string name="json_error">Error Occured [Server\'s JSON response might be invalid]!</string>
+
+    <string name="resource_not_found">Den ønskede resouce kunne ikke findes</string>
+    <string name="server_error">Der skete en fejl på serveren</string>
+    <string name="unexpected_error">Uventet fejl! [Mest almindelige fejl: Internettet er ikke koblet op til internettet eller serveren kører ikke]</string>
+    <string name="json_error">Der skete en fejl [Serveren\'s JSON-svar kan være ugyldigt]!</string>
+
     <string name="password_match">Indstastet kodeord stemmer ikke overens</string>
-    <string name="blank_form">Please fill the form, don\'t leave any field blank</string>
-    <string name="login_success">You are successfully logged in!</string>
-    <string name="add_trash">Tilføj skrald til camp</string>
-    <string name="add_trash_to">Tilføj skrald til</string>
+    <string name="blank_form">Udfyld venligst alle felter</string>
+    <string name="login_success">Du er nu logget!</string>
+    <string name="add_trash_to">Tilføj skrald til&#160;</string>
     <string name="add">Tilføj</string>
     <string name="trash_added">Skrald blev tilføjet</string>
-    <string name="kg">kg</string>
+    <string name="kg">&#160;kg.</string>
     <string name="msg_id_not_found">Beskedens ID kunne ikke findes</string>
     <string name="add_comment_error">Du skal skrive noget for at kunne tilføje en kommentar</string>
 

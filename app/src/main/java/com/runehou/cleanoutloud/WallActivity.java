@@ -1,11 +1,9 @@
 package com.runehou.cleanoutloud;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +16,12 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
-
-import static com.runehou.cleanoutloud.R.id.errorTxt;
 
 public class WallActivity extends Activity {
 
@@ -70,16 +64,9 @@ public class WallActivity extends Activity {
         btn_add_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Nicki", ":Der bev klikket ");
-//            Intent intent = new Intent(this, CommentsActivity.class);
-//            startActivity(intent);
-//            finish();
                 startActivity(new Intent(getApplicationContext(), AddMessageActivity.class));
-
             }
         });
-
-
     }
 
     @Override
@@ -95,25 +82,22 @@ public class WallActivity extends Activity {
 
             @Override
             public void onSuccess(String response) {
-                Log.d("Nicki", ": ON SUCCESS!" );
                 // Hide Progress Dialog
                 prgDialog.hide();
                 try {
                     // JSON Object
                     JSONObject obj = new JSONObject(response);
                     // When the JSON response has status boolean value assigned with true
-                        JSONArray messageList = obj.getJSONArray("wall");
-                        for (int i = 0; i < messageList.length(); i++) {
-                            JSONObject item = messageList.getJSONObject(i);
-                            messageObjectList.add(new MessageObject(item.getString("text"), Utility.dateFormat(item.getString("date"), getResources().getString(R.string.date_error)), item.getInt("id")));
-                        }
-                        listView.setAdapter(adapter);
+                    JSONArray messageList = obj.getJSONArray("wall");
+                    for (int i = 0; i < messageList.length(); i++) {
+                        JSONObject item = messageList.getJSONObject(i);
+                        messageObjectList.add(new MessageObject(item.getString("text"), Utility.dateFormat(item.getString("date"), getResources().getString(R.string.date_error)), item.getInt("id")));
+                    }
+                    listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
-
                 }
             }
 
@@ -144,23 +128,16 @@ public class WallActivity extends Activity {
         });
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        if (view == btn_add_message) {
-//
-//    }
-
     public class MessageObject {
         String text;
         String date;
         int id;
 
-        MessageObject (String text, String date, int id) {
+        MessageObject(String text, String date, int id) {
             this.text = text;
-            this.date= date;
+            this.date = date;
             this.id = id;
         }
-
     }
 
 
@@ -183,22 +160,19 @@ public class WallActivity extends Activity {
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             if (view == null) {
-                view = getLayoutInflater().inflate(R.layout.recycle_item_wall, null);
+                view = getLayoutInflater().inflate(R.layout.wall_item, null);
             }
 
-             TextView tvInfo = (TextView) view.findViewById(R.id.tv_message_info);
+            TextView tvInfo = (TextView) view.findViewById(R.id.tv_message_info);
             TextView tvDate = (TextView) view.findViewById(R.id.tv_message_date);
             TextView tvText = (TextView) view.findViewById(R.id.tv_message);
 
             String str = messageObjectList.get(position).text;
-            tvInfo.setText(str.substring(0,str.indexOf(":")));
+            tvInfo.setText(str.substring(0, str.indexOf(":")));
             tvText.setText(str.substring(str.indexOf(":") + 4));
             tvDate.setText(messageObjectList.get(position).date);
 
             return view;
         }
     }
-
-
-
 }

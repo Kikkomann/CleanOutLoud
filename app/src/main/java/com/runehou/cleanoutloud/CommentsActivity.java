@@ -1,7 +1,6 @@
 package com.runehou.cleanoutloud;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,10 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class CommentsActivity extends Activity {
 
@@ -137,7 +133,6 @@ public class CommentsActivity extends Activity {
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -247,7 +242,7 @@ public class CommentsActivity extends Activity {
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             if (view == null) {
-                view = getLayoutInflater().inflate(R.layout.recycle_item_wall, null);
+                view = getLayoutInflater().inflate(R.layout.wall_item, null);
             }
 
             TextView tvInfo = (TextView) view.findViewById(R.id.tv_message_info);

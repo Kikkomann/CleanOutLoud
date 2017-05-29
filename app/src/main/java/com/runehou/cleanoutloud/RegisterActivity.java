@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,12 +33,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     EditText etUserName, etPassword, etPasswordConfirm;
     Button registerBtn, btnChooseCamp;
     String selectedCamp;
-    AlertDialog alert11;
-
 
     private List<String> camps = new ArrayList<String>();
-
-    String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +63,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         invokeRESTCamps(params);
 
 
-//        campsSpinner = (Spinner) findViewById(R.id.camps_spinner);
         btnChooseCamp = (Button) findViewById(R.id.btn_register_choose_camp);
         btnChooseCamp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +73,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 CampPicker.setMaxValue(stringsCamps.length-1);
                 CampPicker.setDisplayedValues(stringsCamps);
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                builder.setMessage(R.string.choose_your_camp);
+                builder.setCancelable(true);
+                builder.setView(CampPicker);
 
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
-                builder1.setMessage(R.string.choose_your_camp);
-                builder1.setCancelable(true);
-                builder1.setView(CampPicker);
-
-
-
-                builder1.setPositiveButton(
+                builder.setPositiveButton(
                         getResources().getString(R.string.choose_camp),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -97,7 +88,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                             }
                         });
 
-                builder1.setNegativeButton(
+                builder.setNegativeButton(
                         R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -105,29 +96,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                             }
                         });
 
-                alert11 = builder1.create();
-                alert11.show();
-
-
-
-
-
-
-
-
+                builder.create().show();
             }
         });
         registerBtn = (Button) findViewById(R.id.btn_register);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                RequestParams params1 = new RequestParams();
-//                params1.put("username", etUserName);
-//                params1.put("password", etPassword);
-//                params1.put("camp", selectedCamp);
-//                invokeWS(params1);
-
                 registerUser();
 
             }
@@ -137,8 +112,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     /**
      * Method gets triggered when Register button is clicked
-     *
-     * @param
      */
     public void registerUser() {
         // Get NAme ET control value
@@ -151,7 +124,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         RequestParams params = new RequestParams();
         if (Utility.isNotNull(name) && Utility.isNotNull(passwordConFirm) && Utility.isNotNull(password)) {
             if (password.equals(passwordConFirm)) {
-
                 if (!selectedCamp.isEmpty()) {
                     params.put("username", name);
                     params.put("password", password);
@@ -164,7 +136,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             } else {
                 Toast.makeText(getApplicationContext(), R.string.password_match, Toast.LENGTH_LONG).show();
             }
-
         } else {
             Toast.makeText(getApplicationContext(), R.string.blank_form, Toast.LENGTH_LONG).show();
         }
@@ -229,31 +200,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    /**
-     * Method which navigates from Register Activity to Login Activity
-     */
-    public void navigatetoLoginActivity(View view) {
-        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-        // Clears History of Activity
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(loginIntent);
-    }
-
-    /**
-     * Set degault values for Edit View controls
-     */
-    public void setDefaultValues() {
-        etUserName.setText("");
-        etPassword.setText("");
-    }
-
     public void invokeRESTCamps(final RequestParams params) {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://52.43.233.138:8080/CoLWebService/CoL/camps", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
-                Log.d("Nicki", ": ON SUCCESS!");
                 // Hide Progress Dialog
                 prgDialog.hide();
                 try {
@@ -266,7 +218,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                         camps.add(item.getString("name"));
                     }
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }

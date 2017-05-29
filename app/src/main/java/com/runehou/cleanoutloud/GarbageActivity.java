@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +38,7 @@ public class GarbageActivity extends Activity {
     TextView tvOverskrift;
 
     private ListView listView;
-    ArrayList<campObject> campObjectList = new ArrayList<>();
+    ArrayList<CampObject> campObjectList = new ArrayList<>();
     private CustomAdapter adapter;
     SharedPreferences prefs;
     AlertDialog alert11;
@@ -54,11 +53,9 @@ public class GarbageActivity extends Activity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         btnAddGarbage = (Button) findViewById(R.id.button_wall_add_message);
-        btnAddGarbage.setText(R.string.add_trash);
         btnAddGarbage.setVisibility(View.GONE);
         tvOverskrift = (TextView) findViewById(R.id.tv_overskrift_wall);
         tvOverskrift.setText(R.string.trash_point);
-
 
         prgDialog = new ProgressDialog(this);
         prgDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -69,76 +66,58 @@ public class GarbageActivity extends Activity {
         final RequestParams params = new RequestParams();
         params.put("username", prefs.getString("username", "empty_username"));
         params.put("token", prefs.getString("token", "empty_token"));
-        Log.d("Nicki", "BUTTON! token: " + prefs.getString("token", "empty_token") + " username: " + prefs.getString("username", "empty_username"));
         invokeRESTToCheckUsertype(params);
 
         RequestParams params2 = new RequestParams();
         params2.put("sorted", "true");
         invokeREST(params2);
 
-
         listView = (ListView) findViewById(R.id.listview_messages);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-          if (isAdmin) {
-              final int k = i;
-              final EditText inputText = new EditText(GarbageActivity.this);
-              inputText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                if (isAdmin) {
+                    final int k = i;
+                    final EditText inputText = new EditText(GarbageActivity.this);
+                    inputText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(GarbageActivity.this);
-                builder1.setMessage(getString(R.string.add_trash_to) + campObjectList.get(i).name);
-                builder1.setCancelable(true);
-                builder1.setView(inputText);
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(GarbageActivity.this);
+                    builder1.setMessage(getString(R.string.add_trash_to) + campObjectList.get(i).name);
+                    builder1.setCancelable(true);
+                    builder1.setView(inputText);
 
+                    builder1.setPositiveButton(
+                            R.string.add,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    RequestParams params = new RequestParams();
+                                    params.put("campname", campObjectList.get(k).name);
+                                    String str = String.valueOf(inputText.getText());
+                                    str = str.replace(",", ".");
+                                    params.put("weight", str + "f");
+                                    params.put("token", prefs.getString("token", "empty_token"));
+                                    invokeRESTAddGarbage(params);
+                                    dialog.cancel();
 
+                                    Intent intent = new Intent(getApplicationContext(), GarbageActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                }
+                            });
 
-                builder1.setPositiveButton(
-                        R.string.add,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                RequestParams params = new RequestParams();
-                                params.put("campname", campObjectList.get(k).name);
-                                String str = String.valueOf(inputText.getText());
-                                str = str.replace(",", ".");
-                                params.put("weight", str + "f");
-                                params.put("token", prefs.getString("token", "empty_token"));
-                                invokeRESTAddGarbage(params);
-                                dialog.cancel();
+                    builder1.setNegativeButton(
+                            R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
 
-                                Intent intent = new Intent(getApplicationContext(), GarbageActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-
-
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                alert11 = builder1.create();
-                alert11.show();
-          }
-
+                    alert11 = builder1.create();
+                    alert11.show();
+                }
             }
         });
-
-
-//        btnAddGarbage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
-//        });
-
-
     }
 
     @Override
@@ -153,7 +132,6 @@ public class GarbageActivity extends Activity {
         client.get("http://52.43.233.138:8080/CoLWebService/CoL/camps", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
-                Log.d("Nicki", ": ON SUCCESS!");
                 // Hide Progress Dialog
                 prgDialog.hide();
                 try {
@@ -163,13 +141,12 @@ public class GarbageActivity extends Activity {
                     JSONArray campList = obj.getJSONArray("camps");
                     for (int i = 0; i < campList.length(); i++) {
                         JSONObject item = campList.getJSONObject(i);
-                        Log.d("Nicki", "getWeight: " + Float.valueOf(item.getString("weight")));
-                        campObjectList.add(new campObject(item.getString("name"), item.getString("location"), Float.valueOf(item.getString("weight"))));
+//                        campObjectList.add(new CampObject(item.getString("name"), item.getString("location"), Float.valueOf(item.getString("weight"))));
+                        campObjectList.add(new CampObject(item.getString("name"), Float.valueOf(item.getString("weight"))));
                     }
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -200,7 +177,6 @@ public class GarbageActivity extends Activity {
             }
         });
     }
-
 
     public void invokeRESTToCheckUsertype(final RequestParams params) {
         prgDialog.show();
@@ -219,7 +195,6 @@ public class GarbageActivity extends Activity {
                         isAdmin = true;
                     }
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     Toast.makeText(getApplicationContext(), R.string.json_error, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -251,8 +226,6 @@ public class GarbageActivity extends Activity {
         });
     }
 
-
-
     public void invokeRESTAddGarbage(final RequestParams params) {
         prgDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
@@ -261,9 +234,9 @@ public class GarbageActivity extends Activity {
             public void onSuccess(String response) {
                 // Hide Progress Dialog
                 prgDialog.hide();
-             Toast.makeText(getApplicationContext(), R.string.trash_added, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.trash_added, Toast.LENGTH_SHORT).show();
 
-                }
+            }
 
             // When the response returned by REST has Http response code other than '200'
             @Override
@@ -292,15 +265,19 @@ public class GarbageActivity extends Activity {
     }
 
 
-
-    public class campObject {
+    public class CampObject {
         String name;
         String location;
         Float weight;
 
-        campObject(String name, String location, Float weight) {
+        CampObject(String name, String location, Float weight) {
             this.name = name;
             this.location = location;
+            this.weight = weight;
+        }
+
+        CampObject(String name, Float weight) {
+            this.name = name;
             this.weight = weight;
         }
 
@@ -326,16 +303,16 @@ public class GarbageActivity extends Activity {
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             if (view == null) {
-                view = getLayoutInflater().inflate(R.layout.recycle_item_wall, null);
+                view = getLayoutInflater().inflate(R.layout.recycle_item, null);
             }
 
             TextView tvInfo = (TextView) view.findViewById(R.id.tv_message_info);
             TextView tvDate = (TextView) view.findViewById(R.id.tv_message_date);
-            TextView tvText = (TextView) view.findViewById(R.id.tv_message);
+//            TextView tvText = (TextView) view.findViewById(R.id.tv_message);
 
             tvInfo.setText(campObjectList.get(position).name);
             tvDate.setText(String.valueOf(campObjectList.get(position).weight) + getString(R.string.kg));
-            tvText.setText(campObjectList.get(position).location);
+//            tvText.setText(campObjectList.get(position).location);
 
             return view;
         }

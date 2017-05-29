@@ -20,6 +20,7 @@ public class Utility {
 
     /**
      * Validate Email with regular expression
+     *Is not used, but we might want to use emails later on
      *
      * @param email
      * @return true for Valid Email and false for Invalid Email
@@ -32,11 +33,11 @@ public class Utility {
     /**
      * Checks for Null String object
      *
-     * @param txt
+     * @param txt the text to be checked
      * @return true for not null and false for null String object
      */
     public static boolean isNotNull(String txt){
-        return txt!=null && txt.trim().length()>0 ? true: false;
+        return txt!=null && txt.trim().length()>0;
     }
 
     public static String dateFormat(String dateString, String error) {
@@ -56,7 +57,5 @@ public class Utility {
                 return error;
             }
         }
-
-
     }
 }
